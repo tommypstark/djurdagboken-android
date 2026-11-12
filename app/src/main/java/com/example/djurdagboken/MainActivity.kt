@@ -7,6 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,17 +30,28 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun DjurdagbokenScreen() {
-    val animal = Animal("Pancake", "Skäggagam")
+
+    val animals = listOf(
+        Animal("Pancake", "Skäggagam"),
+        Animal("Pinpin", "Ögonfransgecko"),
+        Animal("Wookie", "Yorkshireterrier")
+    )
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
+
             Text("Djurdagboken")
-            Text("${animal.name} – ${animal.species}")
+
+            LazyColumn {
+                items(animals) { animal ->
+                    Text("${animal.name} – ${animal.species}")
+                }
+            }
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, device = "spec:width=1080px,height=2340px,dpi=640")
 @Composable
 fun DjurdagbokenPreview() {
     DjurdagbokenTheme {
