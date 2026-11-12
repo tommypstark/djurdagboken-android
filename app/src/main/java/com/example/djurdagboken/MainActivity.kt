@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -19,13 +20,20 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             DjurdagbokenTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Text(
-                        text = "Djurdagboken",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                DjurdagbokenScreen()
             }
+        }
+    }
+}
+
+@Composable
+fun DjurdagbokenScreen() {
+    val animal = Animal("Pancake", "Skäggagam")
+
+    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+        Column(modifier = Modifier.padding(innerPadding)) {
+            Text("Djurdagboken")
+            Text("${animal.name} – ${animal.species}")
         }
     }
 }
@@ -34,6 +42,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun DjurdagbokenPreview() {
     DjurdagbokenTheme {
-        Text("Djurdagboken")
+        DjurdagbokenScreen()
     }
 }
