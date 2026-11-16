@@ -51,7 +51,7 @@ fun DjurdagbokenScreen() {
     }
 }
 
-@Preview(showBackground = true, device = "spec:width=1080px,height=2340px,dpi=640")
+@Preview(showBackground = true)
 @Composable
 fun DjurdagbokenPreview() {
     DjurdagbokenTheme {
