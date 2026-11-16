@@ -11,4 +11,10 @@ class AnimalViewModel : ViewModel() {
         )
     )
         private set
+
+    fun addAnimal(animal: Animal) {
+        uiState = uiState.copy(
+            animals = uiState.animals + animal
+        )
+    }
 }
