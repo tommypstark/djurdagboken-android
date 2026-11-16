@@ -33,25 +33,28 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
+private val JungleColorScheme = darkColorScheme(
+    primary = JungleGreen,
+    onPrimary = JungleDarkText,
+
+    secondary = JungleYellow,
+    onSecondary = JungleDarkText,
+
+    background = JungleBackground,
+    onBackground = JungleText,
+
+    surface = JungleSurface,
+    onSurface = JungleText,
+
+    surfaceVariant = JungleSurfaceVariant
+)
+
 @Composable
 fun DjurdagbokenTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = JungleColorScheme,
         typography = Typography,
         content = content
     )
