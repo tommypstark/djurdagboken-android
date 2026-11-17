@@ -10,4 +10,6 @@ val JungleGreen = Color(0xFF7CB342)
 val JungleYellow = Color(0xFFF2C94C)
 
 val JungleText = Color(0xFFF5F2E8)
-val JungleDarkText = Color(0xFF172018)
+val JungleDarkText = Color(0xFF293A2A)
+
+val JungleCard = Color(0xFF2E3F2F)
