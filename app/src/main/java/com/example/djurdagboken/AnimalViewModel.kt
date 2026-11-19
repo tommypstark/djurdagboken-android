@@ -1,5 +1,6 @@
 package com.example.djurdagboken
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.*
 

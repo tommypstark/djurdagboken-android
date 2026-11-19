@@ -15,14 +15,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -42,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.djurdagboken.ui.theme.DjurdagbokenTheme
 import com.example.djurdagboken.ui.theme.JungleCard
+import com.example.djurdagboken.ui.theme.JungleText
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,11 +81,23 @@ fun DjurdagbokenScreen(
     uiState: AnimalUiState,
     onAddAnimal: (Animal) -> Unit
 ) {
+    val nameState = rememberTextFieldState(initialText = "")
+    var selectedSpecies by remember { mutableStateOf<String?>(null) }
+
+    val speciesOptions = listOf(
+        "Skäggagam",
+        "Ögonfransgecko",
+        "Hund",
+        "Katt"
+    )
+
+    var speciesMenuExpanded by remember { mutableStateOf(false) }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background
                 ),
                 title = {
@@ -95,6 +119,111 @@ fun DjurdagbokenScreen(
         }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
+
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 0.dp,
+                        bottom = 6.dp
+                    ),
+                state = nameState,
+                label = { Text("Skriv djurets namn") },
+                shape = RoundedCornerShape(16.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = JungleCard,
+                    unfocusedContainerColor = JungleCard,
+                    focusedBorderColor = JungleText,
+                    unfocusedBorderColor = JungleText,
+                    focusedLabelColor = JungleText,
+                    unfocusedLabelColor = JungleText,
+                    focusedTextColor = JungleText,
+                    unfocusedTextColor = JungleText
+                )
+            )
+
+            ExposedDropdownMenuBox(
+                expanded = speciesMenuExpanded,
+                onExpandedChange = {
+                    speciesMenuExpanded = !speciesMenuExpanded
+                }
+            ) {
+                OutlinedTextField(
+                    value = selectedSpecies ?: "",
+                    onValueChange = { },
+                    readOnly = true,
+                    label = { Text("Välj djurets art") },
+
+                    shape = RoundedCornerShape(16.dp),
+
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = JungleCard,
+                        unfocusedContainerColor = JungleCard,
+                        focusedBorderColor = JungleText,
+                        unfocusedBorderColor = JungleText,
+                        focusedLabelColor = JungleText,
+                        unfocusedLabelColor = JungleText,
+                        focusedTextColor = JungleText,
+                        unfocusedTextColor = JungleText
+                    ),
+
+                    modifier = Modifier
+                        .menuAnchor(
+                            ExposedDropdownMenuAnchorType.PrimaryNotEditable
+                        )
+                        .fillMaxWidth()
+                        .padding(
+                            start = 16.dp,
+                            end = 16.dp,
+                            bottom = 6.dp
+                        ),
+
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(
+                            expanded = speciesMenuExpanded
+                        )
+                    }
+                )
+                ExposedDropdownMenu(
+                    expanded = speciesMenuExpanded,
+                    onDismissRequest = {
+                        speciesMenuExpanded = false
+                    }
+                ) {
+                    speciesOptions.forEach { species ->
+                        DropdownMenuItem(
+                            text = { Text(species) },
+                            onClick = {
+                                selectedSpecies = species
+                                speciesMenuExpanded = false
+                            }
+                        )
+                    }
+                }
+            }
+
+            Button(
+                onClick = {
+                    onAddAnimal(
+                        Animal(
+                            name = nameState.text.toString(),
+                            species = selectedSpecies!!
+                        )
+                    )
+                },
+                enabled = nameState.text.isNotBlank() && selectedSpecies != null,
+                modifier = Modifier.padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = 0.dp,
+                    bottom = 16.dp
+                )
+            ) {
+                Text(text = "Lägg till",
+                    fontSize = 20.sp)
+            }
 
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
